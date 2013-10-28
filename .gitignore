@@ -1,2 +1,9 @@
+# Eclipse files
+.project
+.settings
+
+# NPM packages
 node_modules
+
+# Logs
 npm-debug.log
