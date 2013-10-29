@@ -1,0 +1,61 @@
+!!!
+//if IE 8
+	<html class="no-js lt-ie9" lang="en">
+//if gt IE 8
+	<html class="no-js" lang="en">
+	
+head
+	meta(charset="utf-8")
+	meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+	meta(name="viewport", content="width=device-width")
+  
+	meta(name="keywords", content="social, review, customber behavior, experience, emotion, geo-localisation, bar, restaurant, semantic, mobile, montreal, startup")
+	meta(name="description", content="Re-Zerve help you fill up your restaurant!")
+	meta(name="author", content="Re-Zerve")
+	meta(name="copyright", content="Re-Zerve Copyright (c) 2013")
+  
+	title #{title} - Re-Zerve!
+	
+	link(rel="stylesheet" href="/css/normalize.css", type='text/css')
+	link(rel="stylesheet", href="/css/foundation.css", type='text/css')
+	link(rel="stylesheet", href="/css/main.css", type='text/css')
+	script(src="/js/vendor/custom.modernizr.js")
+	
+	link(id="font", href='http://fonts.googleapis.com/css?family=Lobster|Raleway', rel='stylesheet', type='text/css')
+
+body
+	header
+ 
+	block content
+    
+	script.
+		document.write('<script src=' + ('__proto__' in {} ? '/js/vendor/zepto' : '/js/vendor/jquery') + '.js');
+		
+	script(src="/js/foundation.min.js")
+  
+	//
+		script(src="/js/foundation/foundation.js")
+		script(src="/js/foundation/foundation.interchange.js")
+		script(src="/js/foundation/foundation.abide.js")
+		script(src="/js/foundation/foundation.dropdown.js")
+		script(src="/js/foundation/foundation.placeholder.js")
+		script(src="/js/foundation/foundation.forms.js")
+		script(src="/js/foundation/foundation.alerts.js")
+		script(src="/js/foundation/foundation.magellan.js")
+		script(src="/js/foundation/foundation.reveal.js")
+		script(src="/js/foundation/foundation.tooltips.js")
+		script(src="/js/foundation/foundation.clearing.js")
+		script(src="/js/foundation/foundation.cookie.js")
+		script(src="/js/foundation/foundation.joyride.js")
+		script(src="/js/foundation/foundation.orbit.js")
+		script(src="/js/foundation/foundation.section.js")
+		script(src="/js/foundation/foundation.topbar.js")
+	script.
+		$(document).foundation();
+
+	//
+		script.
+			var _gaq=[['_setAccount','UA-40627611-1'],['_trackPageview']];
+			(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+			g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+			s.parentNode.insertBefore(g,s)}(document,'script'));

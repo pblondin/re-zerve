@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+
+	h3 Show a restaurant
+	div(class="row")
+		div(class="large-3 columns") #{restaurant._id}
+		div(class="large-1 columns") #{restaurant.name}
+		div(class="large-1 columns") #{restaurant.owner_name}
+		div(class="large-3 columns") #{restaurant.reservation_email}
+		div(class="large-3 columns") #{restaurant.survey_url}
+		
