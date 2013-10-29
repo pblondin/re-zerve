@@ -11,17 +11,17 @@ module.exports = function() {
 
   // Configure application settings.  Consult the Express API Reference for a
   // list of the available [settings](http://expressjs.com/api.html#app-settings).
-  //this.set('views', __dirname + '/../../app/views');
-  //this.set('view engine', 'jade');
+  this.set('views', __dirname + '/../../app/views');
+  this.set('view engine', 'jade');
 
   // Register Jade as a template engine.
-  //this.engine('jade', require('jade').__express);
+  this.engine('jade', require('jade').__express);
 
   // Override default template extension.  By default, Locomotive finds
   // templates using the `name.format.engine` convention, for example
   // `index.html.ejs`  For some template engines, such as Jade, that find
   // layouts using a `layout.engine` notation, this results in mixed conventions
-  // that can cuase confusion.  If this occurs, you can map an explicit
+  // that can cause confusion.  If this occurs, you can map an explicit
   // extension to a format.
   /* this.format('html', { extension: '.jade' }) */
 
@@ -37,8 +37,8 @@ module.exports = function() {
   this.use(poweredBy('null'));
   this.use(express.logger());
   this.use(express.favicon());
-  //this.use(express.static(__dirname + '/../../public'));
+  this.use(express.static(__dirname + '/../../public'));
   this.use(express.bodyParser());
-  this.use(express.methodOverride());
+  //this.use(express.methodOverride());
   this.use(this.router);
 }
