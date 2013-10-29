@@ -1,9 +1,10 @@
 var express = require('express');
+var utils = require('connect').utils;
 
 module.exports = function() {
-  this.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
   this.set('db-uri', 'mongodb://localhost/rezerve');
-  this.set('view options', {
-    pretty: true
-  });
-}
+  this.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  
+  // Set pretty prints
+  this.express.locals.pretty = true;
+};
