@@ -39,7 +39,10 @@ updateResource = function(id, update, res, cb) {
 RestaurantController.index = function() {
   var self = this; 
   fetchResource({}, self.res, function(err, restaurants) {
-    (err) ? self.next(err) : self.res.send(restaurants);
+    (err) ? self.next(err) : self.render('index', {
+    	'title': "Show all restaurants",
+    	'restaurants': restaurants
+    });
   });
 };
 
@@ -68,7 +71,10 @@ RestaurantController.create = function() {
 RestaurantController.show = function() {
   var self = this;
   fetchResource({_id: self.param('id')}, self.res, function(err, restaurant) {
-    (err) ? self.next(err) : self.res.send(restaurant[0]);
+    (err) ? self.next(err) : self.render('show', {
+    	'title': "View a restaurant",
+    	'restaurant': restaurant[0]
+    });
   });
 };
 
