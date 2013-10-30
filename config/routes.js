@@ -6,7 +6,7 @@
 // Guide on [routing](http://locomotivejs.org/guide/routing.html) for additional
 // information.
 module.exports = function routes() {
-  this.root('restaurants#index');
+  //this.root('restaurants#index');
   //this.resources('restaurants');
   this.match('restaurants/search', 'restaurants#search');
   this.match('restaurants/:id/showcodes', 'restaurants#showcodes');
