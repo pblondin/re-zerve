@@ -48,23 +48,40 @@ RestaurantController.index = function() {
 
 // New (GET	/restaurants/new)
 RestaurantController.new = function() { 
-  //this.render();
-  this.res.send("New restaurant have been created!");
+  var self = this;
+  self.render('new', {
+	  title		: 'New restaurant'
+  });
 };
 
 // Create (POST	/restaurants)
 RestaurantController.create = function() {
   var self = this;
-  var restaurant = new Restaurant({
-    name               : self.param('name'),
-    owner_name         : self.param('owner_name'),
-    reservation_email  : self.param('reservation_email'),
-    survey_url         : self.param('survey_url')
-  });
   
-  restaurant.save(function(err){
-    (err) ? self.next(err) : self.redirect(self.urlFor({ action: 'index' }));
-  });
+  self.req.assert('name', 'Name is required').notEmpty();
+  self.req.assert('survey_url', 'A valid URL is required').isUrl();
+  self.req.assert('survey_url', 'Survey URL is required').notEmpty();
+  self.req.assert('reservation_email', 'A valid email is required').isEmail();
+  self.req.assert('reservation_email', 'Reservation email is required').notEmpty();
+  
+  var errors = self.req.validationErrors(true);
+  if (errors) {
+	  self.res.json({
+		  title			: 'New restaurant',
+		  has_errors	: true,
+		  errors		: errors
+	  });
+  } else {
+	  var restaurant = new Restaurant({
+		  name               : self.param('name'),
+		  owner_name         : self.param('owner_name'),
+		  reservation_email  : self.param('reservation_email'),
+		  survey_url         : self.param('survey_url')
+		  });
+	  restaurant.save(function(err) {
+		  (err) ? self.next(err) : self.res.json({ has_errors: false, url: self.urlFor({ action: 'index' }) });
+	  });
+  }
 };
 
 // Show (GET  /restaurants/:id)
