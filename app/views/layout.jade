@@ -20,18 +20,56 @@ head
 	link(rel="stylesheet", href="/css/foundation.css", type='text/css')
 	link(rel="stylesheet", href="/css/main.css", type='text/css')
 	script(src="/js/vendor/custom.modernizr.js")
+	script.
+		document.write('<script src=' + ('__proto__' in {} ? '/js/vendor/zepto' : '/js/vendor/jquery') + '.js><\/script>');
 	
 	link(id="font", href='http://fonts.googleapis.com/css?family=Lobster|Raleway', rel='stylesheet', type='text/css')
 
 body
-	header
+
+	// Navigation bar
+	.sticky
+		nav.top-bar
+			ul.title-area
+				li.name
+					h1 
+						a(href="#") Re-Zerve
+				li.toggle-topbar.menu-icon
+					a(href="#")
+						span Menu
+			section.top-bar-section
+				// Right section
+				ul.right
+					li.divider
+					li.has-dropdown
+						a(href="/restaurants/") Restaurants
+						ul.dropdown
+							li
+								a(href="/restaurants/") Show all restaurants
+							li
+								a(href="/restaurants/new") Create a new restaurant
+							li
+								a(href="/restaurants/edit") Edit a restaurant
+							li
+								a(href="/restaurants/showcodes") Show survey codes
+							li
+								a(href="/restaurants/gencodes") Generate survey codes
+							li
+								a(href="/restaurants/delete") Delete a restaurant
+					li.divider
+					li
+						a(href="/surveys/") Surveys
+					li.divider
+					li
+						a(href="/reservations/") Reservations
+					li.divider
+					li
+						a(href="/admin/") Admin
  
 	block content
-    
-	script.
-		document.write('<script src=' + ('__proto__' in {} ? '/js/vendor/zepto' : '/js/vendor/jquery') + '.js');
-		
+  
 	script(src="/js/foundation.min.js")
+	script(src="/js/foundation/foundation.topbar.js")
   
 	//
 		script(src="/js/foundation/foundation.js")
@@ -50,9 +88,9 @@ body
 		script(src="/js/foundation/foundation.orbit.js")
 		script(src="/js/foundation/foundation.section.js")
 		script(src="/js/foundation/foundation.topbar.js")
+		
 	script.
 		$(document).foundation();
-
 	//
 		script.
 			var _gaq=[['_setAccount','UA-40627611-1'],['_trackPageview']];
