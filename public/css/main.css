@@ -1,25 +1,54 @@
 /* ==========================================================================
-   Table of Contents
-   
-   ::Global
-   ::Intro
-   ::Survey
-   ::Contact us
-   ========================================================================== */
-   
-/* ==========================================================================
-   Global
-   ========================================================================== */
+ Table of Contents
 
-/*
-.row {
-	background: #eee;
-	margin-bottom: 10px;
+ ::Global
+ ::Intro
+ ::Survey
+ ::Contact us
+ ========================================================================== */
+
+/* ==========================================================================
+ Global
+ ========================================================================== */
+
+.login-container {
+	position: fixed;
+	margin: 0px auto;
+	width: 400px;
+	height: 400px;
+	left: 50%;
+	top: 50%;
+	margin-top: -150px;
+	margin-left: -200px;
+	z-index: 100;
 }
-.row .column {
-	border: 1px solid #ddd;
-	font-weight: bold;
-	text-indent: 3px;
-	padding-top: 8px;
-	padding-bottom: 8px;
+
+.cube {
+	position: relative;
+	margin: 100px auto 0;
+	/*height: 400px;
+	width: 400px;*/
+	-webkit-transition: -webkit-transform .6s ease-in-out;
+	-webkit-transform-style: preserve-3d;
+	-moz-transition: -moz-transform .6s ease-in-out;
+	-moz-transform-style: preserve-3d;
+}
+
+.face {
+	position: absolute;
+	width: 400px;
+	height: 400px;
+}
+
+.cube .front {
+	-webkit-transform: translateZ(200px);
+	-moz-transform: translateZ(200px);
+}
+.cube .side {
+	-webkit-transform: rotateY(90deg) translateZ(200px);
+	-moz-transform: rotateY(90deg) translateZ(200px);
+}
+
+/*.cube:hover {
+	-webkit-transform: rotateY(-90deg);
 }*/
