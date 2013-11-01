@@ -29,91 +29,9 @@ head
 
 body
 
-	// Navigation bar
-	.sticky
-		nav.top-bar
-			ul.title-area
-				li.name
-					h1 
-						a(href="#") Re-Zerve
-				li.toggle-topbar.menu-icon
-					a(href="#")
-						span Menu
-			section.top-bar-section
-				// Right section
-				ul.right
-					li.divider
-					li.has-dropdown
-						a(href="#") Clients
-						ul.dropdown
-							li
-								a(href="/survey")
-									i.fa.fa-comments.fa-fw
-									|  Start a survey
-							li
-								a(href="/reservation")
-									i.fa.fa-cutlery.fa-fw
-									|  Make a reservation
-					li.divider
-					li.has-dropdown
-						a(href="/restaurants/") Restaurants
-						ul.dropdown
-							li
-								a(href="/restaurants/") 
-									i.fa.fa-list-ul.fa-fw
-									|  Show all
-							li
-								a(href="/restaurants/new") 
-									i.fa.fa-save.fa-fw
-									|  New restaurant
-							li
-								a(href="/restaurants/edit") 
-									i.fa.fa-pencil.fa-fw
-									|  Edit									
-							li
-								a(href="/restaurants/delete")
-									i.fa.fa-trash-o.fa-fw
-									|  Delete
-					li.divider
-					li.has-dropdown
-						a(href="/surveys/") Surveys
-						ul.dropdown
-							li
-								a(href="/surveycodes/check") 
-									i.fa.fa-check-square-o.fw
-									|  Validate a code
-							li
-								a(href="/restaurants/gencodes") 
-									i.fa.fa-asterisk.fw
-									|  Generate new codes
-					li.divider
-					li
-						a(href="#") Reservations
-					li.divider
-					li.has-dropdown
-						a(href="#") Admin
-						ul.dropdown
-							li
-								a(href="#") 
-									i.fa.fa-lock.fw
-									|  Manage access
-							li
-								a(href="#") 
-									i.fa.fa-cloud.fa-fw
-									|  Data analytics
-							li
-								a(href="#") 
-									i.fa.fa-comments.fa-fw
-									|  Typeform surveys
-							li
-								a(href="#") 
-									i.fa.fa-envelope.fa-fw
-									|  MailChimp campaign
- 
 	block content
   
 	script(src="/js/foundation.min.js")
-	script(src="/js/foundation/foundation.topbar.js")
 	script(src="/js/foundation/foundation.abide.js")
   
 	//
