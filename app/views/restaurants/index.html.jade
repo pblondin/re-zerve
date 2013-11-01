@@ -6,17 +6,31 @@ block content
 	table
 		thead
 			tr
-				th Restaurant ID
 				th(width="150") Name
 				th(width="150") Owner Name
-				th(width="300") Reservation Email
-				th(width="350") Survey URL
+				th(width="250") Reservation Email
+				th(width="250") Survey URL
+				td # of Survey Codes
+				td Actions
+				//td Creation Date
 		tbody
 		each restaurant in restaurants
 			tr
-				td #{restaurant._id}
 				td #{restaurant.name}
 				td #{restaurant.owner_name}
 				td #{restaurant.reservation_email}
 				td #{restaurant.survey_url}
-				
+				td #{restaurant.num_surveys}
+				td
+					a(href="/restaurants/#{restaurant._id}") 
+						i.fa.fa-search-plus.fa-fw(title="Details")
+					a(href="/restaurants/#{restaurant._id}/edit") 
+						i.fa.fa-pencil.fa-fw(title="Edit")
+					a(href="/restaurants/#{restaurant._id}/showcodes") 
+						i.fa.fa-list-ul.fa-fw(title="Show survey codes")
+					a(href="/restaurants/#{restaurant._id}/gencodes") 
+						i.fa.fa-asterisk.fa-fw(title="Generate new codes")
+					a(href="/restaurants/#{restaurant._id}/delete") 
+						i.fa.fa-trash-o.fa-fw(title="Delete")
+					
+				//td #{restaurant.created_at}

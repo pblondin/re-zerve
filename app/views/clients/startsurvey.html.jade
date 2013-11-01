@@ -1,0 +1,63 @@
+
+// Use client layout if not authenticated
+// extends ../layout-client
+extends ../layout
+
+block content
+
+	script(src="http://code.jquery.com/jquery-2.0.3.min.js")
+	script(src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js")
+	
+	script.
+		$( document ).ready(function() {
+			
+		});	
+	
+	script.
+		$( document ).ready(function() {
+			$('#code-form').submit(function(e) {
+				e.preventDefault(); 	// Prevents the page from refreshing
+			});
+			$('#code-form').on('valid', function () {
+				var $this = $(this);
+				$.ajax(
+					{
+						url				: $this.attr("action"),
+						type			: $this.attr("method"),
+						dataType	: "json",
+						data			: $this.serialize(),
+						success		: function(data) {
+							if(data.is_valid) {
+								$('.restaurant-name').text(data.restaurant_name);
+								//$('#survey_url').attr('href', data.survey_url);
+								$('.cube').css('-webkit-transform','rotateY(-90deg)');
+							} else {					
+								$('.login-container').effect("shake");
+							}
+						}
+					});
+			});			
+		});
+
+	.login-container
+		.cube
+			.face.front
+				form(id="code-form", action="/surveycodes/validate", method="POST", data-abide)
+					fieldset
+						legend Enter your survey code
+						.row.collapse
+							.small-10.columns
+								input(type="text", name="code", placeholder="E.g. JJ30-TCXQ", required pattern="^[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}$")
+								small.error Code must be in this format: XXXX-XXXX.
+							.small-2.columns			
+								input(type='submit', value="Submit", class="postfix button")
+			.face.side
+				fieldset
+					legend Your survey code is valid!
+					.row.collapse
+						.small-10.columns
+							.restaurant-name
+						.small-2.columns
+							//input(type='submit', value="Submit", class="postfix button")
+							a(id='survey_url', href="#", class="postfix button") Go
+							

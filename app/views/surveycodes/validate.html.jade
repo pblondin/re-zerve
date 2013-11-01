@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+
+	h3 Check survey code
+	
+	form(action="/surveycodes/validate", method="POST", data-abide)
+		fieldset
+			.row.small-5.columns
+				.row.collapse			
+					label Survey code (*)		
+					.small-10.columns
+						input(type="text", name="code", placeholder="E.g. XXXX-XXXX", required pattern="[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}")
+						small.error Code is required and must be in this format: XXXX-XXXX.
+					.small-2.columns			
+						input(type='submit', value="Submit", class="postfix button")
