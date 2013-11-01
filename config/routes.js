@@ -8,13 +8,25 @@
 module.exports = function routes() {
   //this.root('restaurants#index');
   //this.resources('restaurants');
-  this.match('restaurants/search', 'restaurants#search');
-  this.match('restaurants/:id/showcodes', 'restaurants#showcodes');
-  this.match('restaurants/:id/gencodes', 'restaurants#generatecodes');
-  this.resources('restaurants');
-  ///
-  //
-  this.match('surveycodes/generate', { controller: 'surveycodes', action: 'generate', via: 'POST'});
-  this.match('surveycodes/validate', { controller: 'surveycodes', action: 'validate', via: 'POST'});
-  this.resources('surveycodes', { only: ['show', 'update', 'destroy'] });
+	
+	/*
+	 * Clients routes
+	 */
+	this.match('survey', { controller: 'clients', action: 'startsurvey', via: 'GET'});
+	//this.match('reservation', { controller: 'clients', action: 'makereservation', via: 'GET'});
+	
+	/*
+	 * Restaurants routes
+	 */
+	this.match('restaurants/search', 'restaurants#search');
+	this.match('restaurants/:id/showcodes', 'restaurants#showcodes');
+	this.match('restaurants/:id/gencodes', 'restaurants#generatecodes');
+	this.resources('restaurants');
+	/*
+	 * Surveys routes
+	 */
+	this.match('surveycodes/generate', { controller: 'surveycodes', action: 'generate', via: 'POST'});
+	this.match('surveycodes/check', { controller: 'surveycodes', action: 'check', via: 'GET'});
+	this.match('surveycodes/validate', { controller: 'surveycodes', action: 'validate', via: 'POST'});
+	this.resources('surveycodes', { only: ['show', 'update', 'destroy'] });
 }
