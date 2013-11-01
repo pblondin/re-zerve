@@ -37,12 +37,28 @@ updateResource = function(id, update, res, cb) {
 
 // Index (GET /restaurants)
 RestaurantController.index = function() {
-  var self = this; 
+  var self = this;
+  
+  function updateRestaurants(restaurants) {
+	  console.log("update restaurants");
+	  console.log("length: " + restaurants.length);
+	  /*for (var i = 0; i < restaurants.length; i++) {
+		  restaurants[i].getNumValidSurveys(function (err, count) {
+			  console.log("count: " + count);
+			  restaurants[i]['num_valid_surveys'] = count;
+		  });  
+	  }*/
+	  self.render('index', {
+		  'title': "Show all restaurants",
+		  'restaurants': restaurants});
+  }
+ 
   fetchResource({}, self.res, function(err, restaurants) {
-    (err) ? self.next(err) : self.render('index', {
-    	'title': "Show all restaurants",
-    	'restaurants': restaurants
-    });
+	  if (err)
+		  self.next(err);
+	  else {
+		  updateRestaurants(restaurants);
+	  }
   });
 };
 
@@ -57,31 +73,16 @@ RestaurantController.new = function() {
 // Create (POST	/restaurants)
 RestaurantController.create = function() {
   var self = this;
-  
-  self.req.assert('name', 'Name is required').notEmpty();
-  self.req.assert('survey_url', 'A valid URL is required').isUrl();
-  self.req.assert('survey_url', 'Survey URL is required').notEmpty();
-  self.req.assert('reservation_email', 'A valid email is required').isEmail();
-  self.req.assert('reservation_email', 'Reservation email is required').notEmpty();
-  
-  var errors = self.req.validationErrors(true);
-  if (errors) {
-	  self.res.json({
-		  title			: 'New restaurant',
-		  has_errors	: true,
-		  errors		: errors
+
+  var restaurant = new Restaurant({
+	  name               : self.param('name'),
+	  owner_name         : self.param('owner_name'),
+	  reservation_email  : self.param('reservation_email'),
+	  survey_url         : self.param('survey_url')
 	  });
-  } else {
-	  var restaurant = new Restaurant({
-		  name               : self.param('name'),
-		  owner_name         : self.param('owner_name'),
-		  reservation_email  : self.param('reservation_email'),
-		  survey_url         : self.param('survey_url')
-		  });
-	  restaurant.save(function(err) {
-		  (err) ? self.next(err) : self.res.json({ has_errors: false, url: self.urlFor({ action: 'index' }) });
-	  });
-  }
+  restaurant.save(function(err) {
+	  (err) ? self.next(err) : self.res.redirect(self.urlFor({ action: 'index' }));
+  });
 };
 
 // Show (GET  /restaurants/:id)

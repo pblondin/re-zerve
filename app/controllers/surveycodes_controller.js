@@ -53,6 +53,14 @@ SurveyCodeController.destroy = function() {
   });
 };
 
+//Validate (GET /surveycodes/check)
+SurveyCodeController.check = function() {
+	var self = this;
+	self.render('validate', {
+		title: 'Check survey code'
+	});
+}
+
 // Validate (POST /surveycodes/validate)
 SurveyCodeController.validate = function() {
   var self = this;
@@ -60,18 +68,22 @@ SurveyCodeController.validate = function() {
   var vCode = CouponCode.validate({code: uCode, parts: 2});
   
   if (vCode == '')
-    return  self.res.send('Code is invalid.');
-
+	  self.res.json({is_valid: false});
+  
   SurveyCode
     .find({code: vCode})
     .populate('rest_ref')
     .exec(function(err, surveycode) {
       if (err)
         self.next(err);
-      else if (!surveycode)
-        self.res.send('SurveyCode not found.');
+      else if (! surveycode || surveycode.length == 0) 	// The survey code does not exist
+    	self.res.json({is_valid: false});
+      else if (! surveycode[0].is_valid) 				// The survey code is expired
+    	  self.res.json({is_valid: false});
       else
-        self.res.send(surveycode);
+    	self.res.json({is_valid: true, 
+    		restaurant_name: surveycode[0].rest_ref.name, 
+    		survey_url: surveycode[0].rest_ref.survey_url});
     });
 };
 
