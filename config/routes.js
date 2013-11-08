@@ -9,6 +9,7 @@ module.exports = function routes() {
   //this.root('restaurants#index');
   //this.resources('restaurants');
 	
+
 	/*
 	 * Clients routes
 	 */
@@ -18,10 +19,36 @@ module.exports = function routes() {
 	/*
 	 * Restaurants routes
 	 */
-	this.match('restaurants/search', 'restaurants#search');
+	
+	/*
+	 * Routes for Restaurant
+	 * 
+	 * Name				Method		Path
+	 * ---------------------------------------------
+	 * Index			GET 		/restaurants
+	 * Show				GET			/restaurants/:id
+	 * New				GET			/restaurants/new
+	 * Create			POST		/restaurants
+	 * Edit 			GET 		/restaurants/edit
+	 * Update 			PUT 		/restaurants/:id
+	 * Delete 			GET 		/restaurants/delete
+	 * Destroy 			DELETE 		/restaurants/:id
+	 * Search			GET			/restaurants/search?<query>
+	 * Showcodes		GET			/restaurants/:id/codes
+	 * Generatecodes	GET			/restaurants/:id/generate?n=<number>
+	 */
+	this.match('restaurants', 				'restaurants#index');
+	this.match('restaurants/new', 			'restaurants#new');
+	this.match('restaurants/edit', 			'restaurants#edit');
+	this.match('restaurants/delete', 		'restaurants#delete');
+	this.match('restaurants/search', 		'restaurants#search');
+	this.match('restaurants/:id', 			'restaurants#show');
 	this.match('restaurants/:id/showcodes', 'restaurants#showcodes');
-	this.match('restaurants/:id/gencodes', 'restaurants#generatecodes');
-	this.resources('restaurants');
+	this.match('restaurants/:id/gencodes', 	'restaurants#generatecodes');
+	this.match('restaurants', 				{ controller: 'restaurants', action: 'create', via: 'POST'});
+	this.match('restaurants/:id', 			{ controller: 'restaurants', action: 'update', via: 'PUT'});
+	this.match('restaurants/:id', 			{ controller: 'restaurants', action: 'destroy', via: 'DELETE'});
+
 	/*
 	 * Surveys routes
 	 */
