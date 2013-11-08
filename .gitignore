@@ -5,6 +5,9 @@
 # NPM packages
 node_modules
 
+# SASS cache folder
+.sass-cache
+
 # Internal docs
 docs
 
