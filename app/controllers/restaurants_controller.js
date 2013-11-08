@@ -10,55 +10,70 @@ var couponCode = require('coupon-code');
 var RestaurantController = new Controller();
  
  
-//TODO: Add authentification
+//TODO: Add authentication
 
-// Utility function
-fetchResource = function(params, res, cb) {
-  Restaurant.find(params, function(err, restaurant) {
-    if (err)
-      return cb(err, null);
-    else if (!restaurant || restaurant.length == 0)
-      return res.send('Restaurant not found.');
-    else
-      return cb(null, restaurant);
-  });
-};
+/*
+ * Routes for Restaurant
+ * 
+ * Name				Method		Path
+ * ---------------------------------------------
+ * Index			GET 		/restaurants
+ * Show				GET			/restaurants/:id
+ * New				GET			/restaurants/new
+ * Create			POST		/restaurants
+ * Edit 			GET 		/restaurants/edit
+ * Update 			PUT 		/restaurants/:id
+ * Delete 			GET 		/restaurants/delete
+ * Destroy 			DELETE 		/restaurants/:id
+ * Search			GET			/restaurants/search?<query>
+ * Showcodes		GET			/restaurants/:id/codes
+ * Generatecodes	GET			/restaurants/:id/generate?n=<number>
+ */
 
-updateResource = function(id, update, res, cb) {
-  Restaurant.findByIdAndUpdate(id, update, function(err, restaurant) {
-    if (err)
-      return cb(err, null);
-    else if (!restaurant || restaurant.length == 0)
-      return res.send('Restaurant not found.');
-    else
-      return cb(null, restaurant);
-  });
-};
 
 // Index (GET /restaurants)
 RestaurantController.index = function() {
+	var self = this;
+	
+	fetchResource({}, self.res, function(err, restaurants) {
+	  (err) ? self.next(err) : self.res.json(restaurants);
+	});
+};
+
+//RestaurantController.index = function() {
+//  var self = this;
+//  
+//  function updateRestaurants(restaurants) {
+//	  console.log("update restaurants");
+//	  console.log("length: " + restaurants.length);
+//	  /*for (var i = 0; i < restaurants.length; i++) {
+//		  restaurants[i].getNumValidSurveys(function (err, count) {
+//			  console.log("count: " + count);
+//			  restaurants[i]['num_valid_surveys'] = count;
+//		  });  
+//	  }*/
+//	  self.render('index', {
+//		  'title': "Show all restaurants",
+//		  'restaurants': restaurants});
+//  }
+// 
+//  fetchResource({}, self.res, function(err, restaurants) {
+//	  if (err)
+//		  self.next(err);
+//	  else {
+//		  updateRestaurants(restaurants);
+//	  }
+//  });
+//};
+
+//Show (GET  /restaurants/:id)
+RestaurantController.show = function() {
   var self = this;
-  
-  function updateRestaurants(restaurants) {
-	  console.log("update restaurants");
-	  console.log("length: " + restaurants.length);
-	  /*for (var i = 0; i < restaurants.length; i++) {
-		  restaurants[i].getNumValidSurveys(function (err, count) {
-			  console.log("count: " + count);
-			  restaurants[i]['num_valid_surveys'] = count;
-		  });  
-	  }*/
-	  self.render('index', {
-		  'title': "Show all restaurants",
-		  'restaurants': restaurants});
-  }
- 
-  fetchResource({}, self.res, function(err, restaurants) {
-	  if (err)
-		  self.next(err);
-	  else {
-		  updateRestaurants(restaurants);
-	  }
+  fetchResource({_id: self.param('id')}, self.res, function(err, restaurant) {
+    (err) ? self.next(err) : self.render('show', {
+    	'title': "View a restaurant",
+    	'restaurant': restaurant[0]
+    });
   });
 };
 
@@ -85,31 +100,15 @@ RestaurantController.create = function() {
   });
 };
 
-// Show (GET  /restaurants/:id)
-RestaurantController.show = function() {
-  var self = this;
-  fetchResource({_id: self.param('id')}, self.res, function(err, restaurant) {
-    (err) ? self.next(err) : self.render('show', {
-    	'title': "View a restaurant",
-    	'restaurant': restaurant[0]
-    });
-  });
-};
-
-// Search (GET /restaurants/search?s=<query>)
-RestaurantController.search = function() {
-  var self = this;
-  fetchResource(self.req.query, self.res, function(err, restaurants) {
-    (err) ? self.next(err) : self.res.send(restaurants);
-  });
-};
-
-// Edit (GET /restaurants/:id/edit)
+// Edit (GET /restaurants/edit)
 RestaurantController.edit = function() { 
-  var self = this;
-  updateResource(self.param('id'), self.req.query, self.res, function(err, restaurant) {
-    (err) ? self.next(err) : self.res.send(restaurant);
-  });
+	var self = this;
+	fetchResource({}, self.res, function(err, restaurants) {
+	   (err) ? self.next(err) : self.render('edit', {
+										title		: 'Edit a restaurant',
+										restaurants	: restaurants
+									});
+	});
 };
 
 // Update (PUT /restaurants/:id)
@@ -133,6 +132,21 @@ RestaurantController.destroy = function() {
   });
 };
 
+// Search (GET /restaurants/search?<query>)
+RestaurantController.search = function() {
+  var self = this;
+  var query = self.req.query;
+  
+  for (var k in query) {
+	  if( query.hasOwnProperty(k) ) {
+		  query[k] = new RegExp(query[k], "i"); // Find case-insensitive match
+	  }
+  }  
+  fetchResource(query, self.res, function(err, restaurants) {
+    (err) ? self.next(err) : self.res.json(restaurants);
+  });
+};
+
 // Show all survey codes (GET /restaurants/:id/codes)
 RestaurantController.showcodes = function() {
   var self = this;
@@ -151,7 +165,7 @@ RestaurantController.showcodes = function() {
     });        
 };
 
-// Generate survey codes for a specific restaurant (GET /restaurants/:id/generate?n=XX)
+// Generate survey codes for a specific restaurant (GET /restaurants/:id/generate?n=<number>)
 RestaurantController.generatecodes = function() {
   var self = this;
   var number_of_codes = 10;
@@ -173,6 +187,30 @@ RestaurantController.generatecodes = function() {
         (err) ? self.next(err) : self.res.send(restaurant[0]);
       });
     }
+  });
+};
+
+
+//Utility function
+fetchResource = function(params, res, cb) {
+  Restaurant.find(params, function(err, restaurant) {
+    if (err)
+      return cb(err, null);
+    else if (!restaurant || restaurant.length == 0)
+      return cb(null, []);	// Restaurant not found.
+    else
+      return cb(null, restaurant);
+  });
+};
+
+updateResource = function(id, update, res, cb) {
+  Restaurant.findByIdAndUpdate(id, update, function(err, restaurant) {
+    if (err)
+      return cb(err, null);
+    else if (!restaurant || restaurant.length == 0)
+      return cb(null, []);	// Restaurant not found.
+    else
+      return cb(null, restaurant);
   });
 };
 
