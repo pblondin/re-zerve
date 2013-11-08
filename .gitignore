@@ -5,5 +5,8 @@
 # NPM packages
 node_modules
 
+# Internal docs
+docs
+
 # Logs
 npm-debug.log
