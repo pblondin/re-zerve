@@ -1,0 +1,84 @@
+extends ../layout
+
+block content
+
+  h3 Edit a restaurant
+  
+  script.
+    $(document).ready(function() {
+      var Restaurant = kendo.data.Model.define({
+        id: "_id",
+        fields: {
+          _id: { type: "string", editable: false, nullable: true },
+          created_at: { type: "date", editable: false, nullable: true }
+        }
+      });
+  
+      var dataSource = new kendo.data.DataSource({
+        transport: {
+          read: {
+            url: "/restaurants",
+            type: "GET",
+            dataType: "json"
+          },
+          create: {
+            url: "/restaurants",
+            type: "POST",
+            dataType: "json"
+          },
+          update: {
+            type: "PUT",
+            dataType: "json"
+          },
+          destroy: {
+            type: "DELETE",
+            dataType: "json"
+          },
+          parameterMap: function(data, type) {
+            if (type == "create" || type == "update") { // Prevent to send _id and __v as parameter
+              delete data['_id'];
+              delete data['__v'];
+              return data;             
+            }
+          }
+        },
+        schema: {
+          model: Restaurant
+        }        
+      });
+      
+      var selectedRestaurant;
+      
+      $('#restaurants-grid').kendoGrid({
+        dataSource: dataSource,
+        selectable: true,
+        sortable: true,
+        groupable: false,
+        toolbar: ["create"],
+        
+        columns: [ 
+          {field: "name", width: 50, title: "Name"}, 
+          {field: "owner_name", width: 50, title: "Owner"}, 
+          {field: "reservation_email", width: 70, title: "Reservation Email"},
+          {field: "survey_url", width: 70, title: "Survey URL"},
+          {field: "created_at", width: 30, title: "Create Date", format: "{0:MM/dd/yyyy}"},
+          {command: ["edit", "destroy"], width: 60, title: "&nbsp;"}],
+        editable: "inline",
+        
+        change: function() {
+          var id = this.select().data("uid");
+          selectedRestaurant = this.dataSource.getByUid(id);
+  
+          this.dataSource.options.transport.destroy.url = "/restaurants/" + selectedRestaurant.id;
+          this.dataSource.options.transport.update.url = "/restaurants/" + selectedRestaurant.id;
+  
+          $("#change-name").val(selectedRestaurant.get("name"));
+          $("#change-owner_name").val(selectedRestaurant.get("owner_name"));
+        }
+      });
+    });
+    
+              
+  #main-container.small-10
+    .foundation-kendo
+      #restaurants-grid

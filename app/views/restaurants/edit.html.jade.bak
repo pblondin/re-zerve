@@ -1,0 +1,100 @@
+extends ../layout
+
+block content
+
+	script.
+		function updateSearchResults(restaurants) {
+			$('#main-container table tbody').remove();
+			var tbody = "<tbody>";
+			$.each(restaurants, function(index, value) {
+				tbody = tbody.concat("<tr>");
+				tbody = tbody.concat("<td>" + value['name'] + "</td>");
+				tbody = tbody.concat("<td>" + value['owner_name'] + "</td>");
+				tbody = tbody.concat("<td>" + value['reservation_email'] + "</td>");
+				tbody = tbody.concat("<td>" + value['survey_url'] + "</td>");
+				tbody = tbody.concat("<td>" + "<a id=" + value['_id'] + " href='#' class='small button' style='margin: 0 auto'>Edit</a>" + "</td>");
+				tbody = tbody.concat("</tr>");
+			});
+			tbody = tbody.concat("</tbody>");
+			$('#main-container table').append(tbody);
+		};
+		
+	
+	script.
+		function updateEditButton() {
+			$('tbody tr td a').on('click', function (e) { // Catch all edit button
+				e.preventDefault(); 	// Prevents the page from refreshing
+				var $this = $(this);
+				
+				$($this.parents('tr')).children('td').each(function (index, value) {
+					alert(index);
+					alert(value);
+					alert($(value).html());
+					
+					$(value).replaceWith('<td><input type="text" name="name" value="' + $(value).html() + '"/></td>');
+					
+				});
+			});
+		};	
+	
+
+	script.
+		$( document ).ready(function() {
+
+			updateEditButton();
+			
+			$('#search-form').submit(function(e) {
+				e.preventDefault(); 	// Prevents the page from refreshing
+			});
+			$('#search-form').on('valid', function () {
+				var $this = $(this);
+				$.ajax(
+					{
+						url				: $this.attr("action"),
+						type			: $this.attr("method"),
+						dataType	: "json",
+						data			: $this.serialize(),
+						success		: function(data) {
+							if(data.length != 0) {
+								updateSearchResults(data);
+								updateEditButton();
+							} else {
+								$('#main-container table tbody').remove();
+							}
+						}
+					});
+			});
+		});
+
+	h3 Edit a restaurant
+	
+	#search-container.small-4
+		form(id="search-form", action="/restaurants/search", method="GET", data-abide)
+			.row.collapse
+				.small-9.columns						
+					input(type="text", name="name", placeholder="Enter the name of the restaurant...", required)
+					small.error Name of restaurant is required.
+				.small-3.columns
+					input(type='submit', value="Search", class="button prefix")						
+						
+	#main-container.small-12
+		table
+			thead
+				tr
+					th(width="150") Name
+					th(width="150") Owner Name
+					th(width="250") Reservation Email
+					th(width="250") Survey URL
+					td Action
+			tbody
+			each restaurant in restaurants
+				tr
+					td #{restaurant.name}
+					td #{restaurant.owner_name}
+					td #{restaurant.reservation_email}
+					td #{restaurant.survey_url}
+					td 
+						a(id="#{restaurant._id}", href="#", class="small button", style="margin: 0 auto") Edit
+							
+						
+					

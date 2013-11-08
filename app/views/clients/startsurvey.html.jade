@@ -9,12 +9,21 @@ block content
 	script(src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js")
 	
 	script.
-		$( document ).ready(function() {
-			
-		});	
-	
+		function renderSurvey() {
+			var qs, js, q, s, d = document, gi = d.getElementById, ce = d.createElement, gt = d.getElementsByTagName, id = 'typef_orm', b = 'https://s3-eu-west-1.amazonaws.com/share.typeform.com/';
+			if (!gi.call(d, id)) {
+				js = ce.call(d, 'script');
+				js.id = id;
+				js.src = b + 'share.js';
+				q = gt.call(d, 'script')[0];
+				q.parentNode.insertBefore(js, q)
+			}
+		}
+								
 	script.
 		$( document ).ready(function() {
+			$('html').addClass('loaded'); // Bootstrap
+			
 			$('#code-form').submit(function(e) {
 				e.preventDefault(); 	// Prevents the page from refreshing
 			});
@@ -28,20 +37,25 @@ block content
 						data			: $this.serialize(),
 						success		: function(data) {
 							if(data.is_valid) {
-								$('.restaurant-name').text(data.restaurant_name);
-								//$('#survey_url').attr('href', data.survey_url);
-								$('.cube').css('-webkit-transform','rotateY(-90deg)');
+								$('#restaurant-name').text(data.restaurant_name);
+								$('#survey_url').attr({
+									'href': "https://howufeel.typeform.com/to/jTmFLr",
+									'data-mode': '1',
+									'target': '_blank'});									
+								renderSurvey(); 			// Bootstrap Typeform Survey								
+								$('#cube').toggleClass('show-front show-right');
 							} else {					
-								$('.login-container').effect("shake");
+								$('#cube').effect("shake");
 							}
 						}
 					});
 			});			
 		});
 
-	.login-container
-		.cube
-			.face.front
+
+	section.login-container
+		#cube.show-front
+			figure.face-front
 				form(id="code-form", action="/surveycodes/validate", method="POST", data-abide)
 					fieldset
 						legend Enter your survey code
@@ -51,13 +65,12 @@ block content
 								small.error Code must be in this format: XXXX-XXXX.
 							.small-2.columns			
 								input(type='submit', value="Submit", class="postfix button")
-			.face.side
+			figure.face-right
 				fieldset
 					legend Your survey code is valid!
 					.row.collapse
 						.small-10.columns
-							.restaurant-name
+							#restaurant-name
 						.small-2.columns
-							//input(type='submit', value="Submit", class="postfix button")
-							a(id='survey_url', href="#", class="postfix button") Go
+							a(id='survey_url', href="#", class="postfix button typeform-share") Go
 							
