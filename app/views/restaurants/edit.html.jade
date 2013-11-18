@@ -4,6 +4,29 @@ block content
 
   h3 Edit a restaurant
   
+  script(id="rowTemplate", type="text/x-kendo-tmpl").
+    <tr data-uid="#= uid #" class="k-alt" role="row">
+      <td role="gridcell">
+        #: name #
+      </td>
+      <td role="gridcell">
+        #: owner_name #
+      </td>
+      <td role="gridcell">
+          #: reservation_email #
+      </td>
+      <td role="gridcell">
+          #: survey_url #
+      </td>
+      <td role="gridcell">
+          #: created_at #
+      </td>
+      <td role="gridcell">
+        <a class="tiny button k-grid-edit" href="\\#">Edit</a>
+        <a class="tiny button k-grid-delete" href="\\#">Delete</a>
+      </td>
+    </tr>
+  
   script.
     $(document).ready(function() {
       var Restaurant = kendo.data.Model.define({
@@ -44,9 +67,10 @@ block content
         },
         schema: {
           model: Restaurant
-        }        
+        },
+        pageSize: 10      
       });
-      
+            
       var selectedRestaurant;
       
       $('#restaurants-grid').kendoGrid({
@@ -54,16 +78,22 @@ block content
         selectable: true,
         sortable: true,
         groupable: false,
-        toolbar: ["create"],
+        pageable: { buttonCount: 5,  refresh: true, pageSizes: true },
+        scrollable: false,
+        navigatable: true,
+        editable: "inline",
+        //toolbar: ["create"],
         
         columns: [ 
           {field: "name", width: 50, title: "Name"}, 
           {field: "owner_name", width: 50, title: "Owner"}, 
-          {field: "reservation_email", width: 70, title: "Reservation Email"},
-          {field: "survey_url", width: 70, title: "Survey URL"},
-          {field: "created_at", width: 30, title: "Create Date", format: "{0:MM/dd/yyyy}"},
-          {command: ["edit", "destroy"], width: 60, title: "&nbsp;"}],
-        editable: "inline",
+          {field: "reservation_email", width: 65, title: "Reservation Email"},
+          {field: "survey_url", width: 35, title: "Survey URL"},
+          {field: "created_at", width: 20, title: "Create Date", format: "{0:MM/dd/yyyy}"},
+          {command: ["edit", "destroy"], width: 30, title: "&nbsp;"}],
+       
+        rowTemplate: kendo.template($("#rowTemplate").html().replace('k-alt', '')),
+        altRowTemplate: kendo.template($("#rowTemplate").html()),
         
         change: function() {
           var id = this.select().data("uid");
@@ -71,14 +101,10 @@ block content
   
           this.dataSource.options.transport.destroy.url = "/restaurants/" + selectedRestaurant.id;
           this.dataSource.options.transport.update.url = "/restaurants/" + selectedRestaurant.id;
-  
-          $("#change-name").val(selectedRestaurant.get("name"));
-          $("#change-owner_name").val(selectedRestaurant.get("owner_name"));
         }
       });
     });
     
               
-  #main-container.small-10
-    .foundation-kendo
-      #restaurants-grid
+  #main-container.small-12
+    #restaurants-grid
