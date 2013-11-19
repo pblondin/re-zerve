@@ -2,6 +2,9 @@
 .project
 .settings
 
+# Webstorm files
+.idea
+
 # NPM packages
 node_modules
 
